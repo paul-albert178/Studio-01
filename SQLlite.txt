@@ -75,3 +75,128 @@ CREATE TABLE Offers (
     FOREIGN KEY (applicant_id) REFERENCES Applicants(applicant_id) ON DELETE CASCADE,
     FOREIGN KEY (job_id)       REFERENCES Job_Role(job_id) ON DELETE CASCADE
 );
+
+BEGIN TRANSACTION;
+
+-- 1. Companies
+INSERT INTO Companies (name, email, phone, address)
+VALUES
+('NovaTech Solutions', 'hr@novatech.co.nz', '09-410-2201',
+ '120 Queen Street, Auckland'),
+
+('Pacific Digital Ltd', 'careers@pacificdigital.co.nz', '09-410-2202',
+ '45 Albert Street, Auckland'),
+
+('Future Systems NZ', 'recruitment@futuresystems.co.nz', '04-410-2203',
+ '80 Lambton Quay, Wellington');
+
+
+-- 2. Job roles created by the companies
+INSERT INTO Job_Role
+(company_id, job_title, department, location, experience_level, status)
+VALUES
+(1, 'Junior Software Developer', 'Information Technology',
+ 'Auckland', 'Entry Level', 'Open'),
+
+(1, 'Database Administrator', 'Information Technology',
+ 'Auckland', 'Intermediate', 'Open'),
+
+(2, 'Customer Support Specialist', 'Customer Service',
+ 'Auckland', 'Entry Level', 'Open'),
+
+(3, 'Business Systems Analyst', 'Business Analysis',
+ 'Wellington', 'Intermediate', 'Closed');
+
+
+-- 3. Applicants applying for the available jobs
+INSERT INTO Applicants
+(job_id, full_name, email, phone, resume, apply_date, status)
+VALUES
+(1, 'Daniel Carter', 'daniel.carter@email.com', '021-410-1001',
+ 'daniel_carter_resume.pdf', '2026-08-20', 'Interview Completed'),
+
+(1, 'Sophia Williams', 'sophia.williams@email.com', '021-410-1002',
+ 'sophia_williams_resume.pdf', '2026-08-21', 'Interview Scheduled'),
+
+(2, 'Ethan Brown', 'ethan.brown@email.com', '021-410-1003',
+ 'ethan_brown_resume.pdf', '2026-08-22', 'Interview Completed'),
+
+(3, 'Olivia Taylor', 'olivia.taylor@email.com', '021-410-1004',
+ 'olivia_taylor_resume.pdf', '2026-08-23', 'Offer Issued'),
+
+(4, 'Noah Anderson', 'noah.anderson@email.com', '021-410-1005',
+ 'noah_anderson_resume.pdf', '2026-08-24', 'Rejected');
+
+
+-- 4. Interview-panel members
+INSERT INTO Interview_Panel
+(name, email, role, expertise)
+VALUES
+('Sarah Thompson', 'sarah.thompson@novatech.co.nz',
+ 'Technical Manager', 'Software Development'),
+
+('James Wilson', 'james.wilson@novatech.co.nz',
+ 'Database Manager', 'Database Administration'),
+
+('Emily Johnson', 'emily.johnson@pacificdigital.co.nz',
+ 'HR Manager', 'Recruitment and Customer Service'),
+
+('Michael Davis', 'michael.davis@futuresystems.co.nz',
+ 'Business Manager', 'Business Systems Analysis');
+
+
+-- 5. Interviews scheduled for applicants
+INSERT INTO Interviews
+(applicant_id, job_id, interviewer_id, interview_date, type, status)
+VALUES
+(1, 1, 1, '2026-09-01 10:00:00', 'AI', 'Completed'),
+
+(2, 1, 1, '2026-09-08 11:30:00', 'Video', 'Scheduled'),
+
+(3, 2, 2, '2026-09-03 09:30:00', 'Live', 'Completed'),
+
+(4, 3, 3, '2026-09-04 14:00:00', 'Video', 'Completed'),
+
+(5, 4, 4, '2026-09-05 13:00:00', 'AI', 'Completed');
+
+
+-- 6. Feedback recorded for completed interviews
+INSERT INTO Feedback
+(interview_id, interviewer_id, rating, comments, ai_score, feedback_date)
+VALUES
+(1, 1, 4,
+ 'Good programming knowledge and strong communication skills.',
+ 87.50, '2026-09-01 12:00:00'),
+
+(3, 2, 5,
+ 'Excellent database knowledge and problem-solving ability.',
+ 92.00, '2026-09-03 11:30:00'),
+
+(4, 3, 5,
+ 'Professional communication and strong customer-service skills.',
+ 94.50, '2026-09-04 16:00:00'),
+
+(5, 4, 2,
+ 'The applicant requires more business-analysis experience.',
+ 56.00, '2026-09-05 15:00:00');
+
+
+-- 7. Offers generated only for selected applicants
+INSERT INTO Offers
+(applicant_id, job_id, offer_date, salary, status, remarks)
+VALUES
+(3, 2, '2026-09-06', 68000.00, 'Pending',
+ 'Offer sent to the selected applicant for review.'),
+
+(4, 3, '2026-09-07', 57000.00, 'Accepted',
+ 'Applicant accepted the employment offer.');
+
+COMMIT;
+
+SELECT * FROM Companies;
+SELECT * FROM Job_Role;
+SELECT * FROM Applicants;
+SELECT * FROM Interview_Panel;
+SELECT * FROM Interviews;
+SELECT * FROM Feedback;
+SELECT * FROM Offers;
